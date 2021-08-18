@@ -4,7 +4,13 @@
     {
         public DeskBookingResult BookDesk(DeskBookingRequest request)
         {
-            throw new System.NotImplementedException();
+            return new DeskBookingResult
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                Date = request.Date
+            };
         }
     }
 }
