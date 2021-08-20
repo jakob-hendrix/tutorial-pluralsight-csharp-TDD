@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DeskBooker.Core.DataInterface;
 using DeskBooker.Core.Domain;
 using Moq;
@@ -27,7 +28,7 @@ namespace DeskBooker.Core.Processor
 
             _availableDesks = new List<Desk>
             {
-                new Desk()
+                new Desk{ Id = 7 }
             };
 
             _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
@@ -84,6 +85,7 @@ namespace DeskBooker.Core.Processor
             Assert.Equal(_request.LastName, savedDeskBooking.LastName);
             Assert.Equal(_request.Email, savedDeskBooking.Email);
             Assert.Equal(_request.Date, savedDeskBooking.Date);
+            Assert.Equal(_availableDesks.First().Id, savedDeskBooking.DeskId);
         }
 
         [Fact]
