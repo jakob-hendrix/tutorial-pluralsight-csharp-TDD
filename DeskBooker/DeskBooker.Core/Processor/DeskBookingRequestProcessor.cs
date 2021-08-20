@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DeskBooker.Core.DataInterface;
 using DeskBooker.Core.Domain;
 
@@ -22,8 +23,10 @@ namespace DeskBooker.Core.Processor
                 throw new ArgumentNullException(nameof(request));
             }
 
-            _deskBookingRepository.Save(Create<DeskBooking>(request));
+            var availableDesks = _deskRepository.GetAvailableDesk(request.Date);
 
+            if (availableDesks.Any())
+                _deskBookingRepository.Save(Create<DeskBooking>(request));
 
             return Create<DeskBookingResult>(request);
         }
