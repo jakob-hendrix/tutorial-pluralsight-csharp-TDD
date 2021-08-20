@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using DeskBooker.Core.DataInterface;
 using DeskBooker.Core.Domain;
@@ -23,6 +24,8 @@ namespace DeskBooker.Core.Processor
                 throw new ArgumentNullException(nameof(request));
             }
 
+            var result = Create<DeskBookingResult>(request);
+
             var availableDesks = _deskRepository.GetAvailableDesk(request.Date);
 
             if (availableDesks.FirstOrDefault() is Desk availableDesk)
@@ -31,9 +34,15 @@ namespace DeskBooker.Core.Processor
                 deskBooking.DeskId = availableDesk.Id;
 
                 _deskBookingRepository.Save(deskBooking);
+
+                result.Code = DeskBookingResultCode.Success;
+            }
+            else
+            {
+                result.Code = DeskBookingResultCode.NoDeskAvailable;
             }
 
-            return Create<DeskBookingResult>(request);
+            return result;
         }
 
         private static T Create<T>(DeskBookingRequest request) where T: DeskBookingBase, new()
